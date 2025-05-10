@@ -1,5 +1,9 @@
 {
 	"name": "Node.js & TypeScript",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+	"features": {
+		"ghcr.io/devcontainers-extra/features/expo-cli:1": {},
+		"ghcr.io/devcontainers-extra/features/prettier:1": {}
+	},
 	"postCreateCommand": "npm install"
 }
