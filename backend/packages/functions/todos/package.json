@@ -1,13 +1,9 @@
 {
   "main": "lib/index.js",
   "devDependencies": {
-    "@types/pg": "^8.15.1",
     "typescript": "^4"
   },
   "scripts": {
     "build": "tsc -b"
-  },
-  "dependencies": {
-    "pg": "^8.15.6"
   }
 }
