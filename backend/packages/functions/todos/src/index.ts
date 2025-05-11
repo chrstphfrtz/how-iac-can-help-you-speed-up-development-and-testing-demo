@@ -19,9 +19,11 @@ interface DigitalOceanResponse {
 
 export async function main(event: DigitalOceanEvent, context: any): Promise<DigitalOceanResponse> {
     if (event.http && event.http.method === 'GET') {
-        // const client = new Client({
-        //     connectionString: process.env.DATABASE_URL,
-        // });
+        const client = new Client({
+            connectionString: process.env.DATABASE_URL,
+        });
+
+        await client.connect();
         // try {
         //     await client.connect();
         //     console.log('Connected to the database successfully!');
@@ -49,7 +51,7 @@ export async function main(event: DigitalOceanEvent, context: any): Promise<Digi
 
         return {
             statusCode: 200,
-            body: process.env.DATABASE_URL,
+            body: "testeroni",
             headers: {
                 'Content-Type': 'text/plain'
             }
