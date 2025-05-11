@@ -31,7 +31,7 @@ interface DigitalOceanResponse {
     headers?: { [key: string]: string };
 }
 
-export async function main(event: DigitalOceanEvent, context: any) {
+export async function main(event: DigitalOceanEvent, context: any): Promise<DigitalOceanResponse> {
     try {
         if (!client) {
             client = new Client(dbConfig);
