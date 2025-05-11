@@ -22,7 +22,7 @@ export async function main(event: DigitalOceanEvent, context: any): Promise<Digi
     console.log(databaseString)
     return {
         statusCode: 200,
-        body: databaseString
+        body: `This is my database string: ${databaseString}`
     }
     // if (event.http && event.http.method === 'GET') {
     //     const client = new Client({
