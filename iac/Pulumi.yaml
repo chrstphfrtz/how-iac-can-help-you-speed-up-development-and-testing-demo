@@ -1,0 +1,6 @@
+name: how-iac-can-hel-you-speed-up-development-and-testing
+description: A demo for using IaC when developing and testing a mobile app with React Native.
+runtime:
+  name: nodejs
+  options:
+    packagemanager: npm

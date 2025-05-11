@@ -1,0 +1,19 @@
+parameters: {}
+environment: {}
+packages:
+    - name: functions
+      shared: false
+      environment: {}
+      parameters: {}
+      annotations: {}
+      functions:
+        - name: todos
+          binary: false
+          main: ""
+          runtime: nodejs:default
+          web: true
+          webSecure: false
+          parameters: {}
+          environment: {}
+          annotations: {}
+          limits: {}
