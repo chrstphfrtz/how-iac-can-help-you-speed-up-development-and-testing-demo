@@ -22,7 +22,19 @@ const demoFunction = new digitalocean.App("demoFunction", {
         branch: "main"
       },
       sourceDir: "backend"
-    }]
+    }],
+    // ingress: {
+    //   rules: [{
+    //     component: {
+    //       name: "demo-function",
+    //     },
+    //     match: {
+    //       path: {
+    //         prefix: "/"
+    //       }
+    //     }
+    //   }]
+    // }
   }
 })
 
