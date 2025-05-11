@@ -1,12 +1,4 @@
-// import { Pool, PoolClient } from 'pg';
-
-// const pool = new Pool({
-//     connectionString: process.env.DATABASE_URL,
-// });
-
-// pool.on('error', (err: Error) => {
-//     console.error('Unexpected error on idle client', err);
-// });
+import { Client } from 'pg';
 
 interface DigitalOceanEvent {
     http?: {
@@ -27,6 +19,23 @@ interface DigitalOceanResponse {
 
 export async function main(event: DigitalOceanEvent, context: any): Promise<DigitalOceanResponse> {
     if (event.http && event.http.method === 'GET') {
+        const client = new Client({
+            connectionString: process.env.DATABASE_URL,
+        });
+        try {
+            await client.connect();
+            console.log('Connected to the database successfully!');
+
+            // You can now execute queries
+            // const result = await client.query('SELECT NOW()');
+            // console.log('Database time:', result.rows[0].now);
+
+        } catch (err) {
+            console.error('Error connecting to the database:', err);
+        } finally {
+            await client.end(); // Close the connection when done
+            console.log('Database connection closed.');
+        }
         // // Access query parameters.
         // // DigitalOcean often puts parsed query params at the top level of the event.
         // const name = event.name as string | undefined || 'stranger';
