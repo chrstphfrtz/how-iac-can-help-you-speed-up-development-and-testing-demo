@@ -24,6 +24,10 @@ const demoFunction = new digitalocean.App("demoFunction", {
       {
         key: "DATABASE_URL",
         value: "${dev.DATABASE_URL}",
+      },
+      {
+        key: "CA_CERT",
+        value: "${dev.CA_CERT}",
       }
     ],
     name: "demo-function",

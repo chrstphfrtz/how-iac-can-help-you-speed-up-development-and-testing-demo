@@ -22,11 +22,12 @@ export async function main(event: DigitalOceanEvent, context: any): Promise<Digi
         const client = new Client({
             connectionString: process.env.DATABASE_URL,
             ssl: {
-                rejectUnauthorized: false,
-            },
+                rejectUnauthorized: true,
+                ca: process.env.CA_CERT
+            }
         });
 
-        await client.connect();
+        // await client.connect();
         // try {
         //     await client.connect();
         //     console.log('Connected to the database successfully!');
