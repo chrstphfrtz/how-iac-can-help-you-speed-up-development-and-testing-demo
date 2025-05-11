@@ -19,7 +19,6 @@ interface DigitalOceanResponse {
 
 export async function main(event: DigitalOceanEvent, context: any): Promise<DigitalOceanResponse> {
     const databaseString = process.env.DATABASE_URL
-    console.log(databaseString)
     return {
         statusCode: 200,
         body: `This is my database string: ${databaseString}`
