@@ -20,9 +20,9 @@ interface DigitalOceanResponse {
 export async function main(event: DigitalOceanEvent, context: any): Promise<DigitalOceanResponse> {
     console.log("Start function!")
     if (event.http && event.http.method === 'GET') {
-        // const client = new Client({
-        //     connectionString: process.env.DATABASE_URL,
-        // });
+        const client = new Client({
+            connectionString: process.env.DATABASE_URL,
+        });
 
         // await client.connect();
         // try {
