@@ -1,59 +1,68 @@
-import { Client } from 'pg';
+import { Pool, PoolConfig } from 'pg';
 
-// interface DigitalOceanEvent {
-//     http?: {
-//         method: string;
-//         path: string;
-//         headers: { [key: string]: string };
-//         queryString: string;
-//         body?: any;
-//     };
-//     [key: string]: any;
-// }
+const dbConfig: PoolConfig = {
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    port: parseInt(process.env.DB_PORT || '5432', 10),
+    max: 1,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+    ssl: {
+        rejectUnauthorized: false,
+    },
+};
 
-// interface DigitalOceanResponse {
-//     statusCode: number;
-//     body: any;
-//     headers?: { [key: string]: string };
-// }
+let pool: Pool;
 
-export async function main(args: {}) {
-    console.log("Start function!")
-    const client = new Client({
-        connectionString: process.env.DATABASE_URL,
-    });
+const getDatabasePool = (): Pool => {
+    if (!pool) {
+        console.log('Initializing database connection pool...');
+        pool = new Pool(dbConfig);
 
-    // await client.connect();
-    // try {
-    //     await client.connect();
-    //     console.log('Connected to the database successfully!');
+        pool.on('error', (err) => {
+            console.error('Unexpected error on idle client', err);
+            process.exit(-1);
+        });
+    }
+    return pool;
+};
 
-    //     // You can now execute queries
-    //     // const result = await client.query('SELECT NOW()');
-    //     // console.log('Database time:', result.rows[0].now);
+export const main = async (args: any): Promise<any> => {
+    // let name: string = args['name'] || 'stranger'
+    // let greeting: string = 'Hello ' + name + '!'
+    // console.log(greeting)
+    // return { body: greeting }
 
-    // } catch (err) {
-    //     console.error('Error connecting to the database:', err);
-    // } finally {
-    //     await client.end(); // Close the connection when done
-    //     console.log('Database connection closed.');
-    // }
-    // // Access query parameters.
-    // // DigitalOcean often puts parsed query params at the top level of the event.
-    // const name = event.name as string | undefined || 'stranger';
-    // const greeting = event.greeting as string | undefined;
+    const databasePool = getDatabasePool();
+    let client;
 
-    // let message = `Hello, ${name}! This was a GET request.`;
+    try {
+        client = await databasePool.connect();
+        console.log('Database client connected from pool.');
 
-    // if (greeting) {
-    //     message = `${greeting}, ${name}! This was a GET request.`;
-    // }
+        // Perform database operations here
+        const result = await client.query('SELECT NOW()');
+        console.log('Database query result:', result.rows[0]);
 
-    return {
-        statusCode: 200,
-        body: process.env.DATABASE_URL,
-        headers: {
-            'Content-Type': 'text/plain'
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                message: 'Database connection and query successful',
+                currentTime: result.rows[0].now,
+            }),
+        };
+    } catch (error) {
+        console.error('Database operation failed:', error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ message: error.message }),
+        };
+    } finally {
+        if (client) {
+            client.release(); // Release the client back to the pool
+            console.log('Database client released.');
         }
-    };
+    }
 }

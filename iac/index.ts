@@ -15,16 +15,32 @@ const demoFunction = new digitalocean.App("demoFunction", {
   projectId: "c1cf44a6-cd57-41bf-b95b-f6a60efed99c",
   spec: {
     databases: [{
-      name: "dev",
+      name: "db",
       engine: "PG",
       production: false,
       version: "17"
     }],
     envs: [
       {
-        key: "DATABASE_URL",
-        value: "${dev.DATABASE_URL}",
-      }
+        key: "DB_USER",
+        value: "${db.USERNAME}",
+      },
+      {
+        key: "DB_PASSWORD",
+        value: "${db.PASSWORD}",
+      },
+      {
+        key: "DB_HOST",
+        value: "${db.HOSTNAME}",
+      },
+      {
+        key: "DB_NAME",
+        value: "${db.DATABASE}",
+      },
+      {
+        key: "DB_PORT",
+        value: "${db.PORT}",
+      },
     ],
     name: "demo-function",
     functions: [{
