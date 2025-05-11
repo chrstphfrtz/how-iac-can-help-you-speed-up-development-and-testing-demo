@@ -14,6 +14,11 @@ const demoDatabaseCluster = new digitalocean.DatabaseCluster("demoDatabaseCluste
 const demoFunction = new digitalocean.App("demoFunction", {
   projectId: "c1cf44a6-cd57-41bf-b95b-f6a60efed99c",
   spec: {
+    databases: [{
+      clusterName: demoDatabaseCluster.name,
+      dbName: demoDatabaseCluster.database,
+      dbUser: demoDatabaseCluster.user,
+    }],
     name: "demo-function",
     functions: [{
       name: "todos",
@@ -23,18 +28,6 @@ const demoFunction = new digitalocean.App("demoFunction", {
       },
       sourceDir: "backend"
     }],
-    // ingress: {
-    //   rules: [{
-    //     component: {
-    //       name: "demo-function",
-    //     },
-    //     match: {
-    //       path: {
-    //         prefix: "/"
-    //       }
-    //     }
-    //   }]
-    // }
   }
 })
 
