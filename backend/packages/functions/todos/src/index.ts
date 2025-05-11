@@ -19,15 +19,11 @@ interface DigitalOceanResponse {
 
 export async function main(event: DigitalOceanEvent, context: any): Promise<DigitalOceanResponse> {
     if (event.http && event.http.method === 'GET') {
-        // const client = new Client({
-        //     connectionString: process.env.DATABASE_URL,
-        //     ssl: {
-        //         rejectUnauthorized: true,
-        //         ca: process.env.CA_CERT
-        //     }
-        // });
+        const client = new Client({
+            connectionString: process.env.DATABASE_URL,
+        });
 
-        // await client.connect();
+        await client.connect();
         // try {
         //     await client.connect();
         //     console.log('Connected to the database successfully!');
