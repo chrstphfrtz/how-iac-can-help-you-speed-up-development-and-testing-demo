@@ -21,6 +21,9 @@ export async function main(event: DigitalOceanEvent, context: any): Promise<Digi
     if (event.http && event.http.method === 'GET') {
         const client = new Client({
             connectionString: process.env.DATABASE_URL,
+            ssl: {
+                rejectUnauthorized: false,
+            },
         });
 
         await client.connect();
