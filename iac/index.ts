@@ -20,12 +20,12 @@ const demoFunction = new digitalocean.App("demoFunction", {
       production: false,
       version: "17"
     }],
-    // envs: [
-    //   {
-    //     key: "DATABASE_URL",
-    //     value: "${dev.DATABASE_URL}",
-    //   }
-    // ],
+    envs: [
+      {
+        key: "DATABASE_URL",
+        value: "${dev.DATABASE_URL}",
+      }
+    ],
     name: "demo-function",
     functions: [{
       name: "todos",
