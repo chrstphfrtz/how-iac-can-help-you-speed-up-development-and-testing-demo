@@ -19,13 +19,13 @@ interface DigitalOceanResponse {
 
 export async function main(event: DigitalOceanEvent, context: any): Promise<DigitalOceanResponse> {
     if (event.http && event.http.method === 'GET') {
-        const client = new Client({
-            connectionString: process.env.DATABASE_URL,
-            ssl: {
-                rejectUnauthorized: true,
-                ca: process.env.CA_CERT
-            }
-        });
+        // const client = new Client({
+        //     connectionString: process.env.DATABASE_URL,
+        //     ssl: {
+        //         rejectUnauthorized: true,
+        //         ca: process.env.CA_CERT
+        //     }
+        // });
 
         // await client.connect();
         // try {
@@ -55,7 +55,7 @@ export async function main(event: DigitalOceanEvent, context: any): Promise<Digi
 
         return {
             statusCode: 200,
-            body: "testeroni",
+            body: process.env.DATABASE_URL,
             headers: {
                 'Content-Type': 'text/plain'
             }
