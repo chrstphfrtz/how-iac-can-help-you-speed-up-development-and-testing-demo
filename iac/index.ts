@@ -17,8 +17,8 @@ const demoFunction = new digitalocean.App("demoFunction", {
     name: "demo-function",
     functions: [{
       name: "todos",
-      github: {
-        repo: "chrstphfrtz/how-iac-can-help-you-speed-up-development-and-testing-demo",
+      git: {
+        repoCloneUrl: "https://github.com/chrstphfrtz/how-iac-can-help-you-speed-up-development-and-testing-demo.git",
         branch: "main"
       },
       sourceDir: "backend"
