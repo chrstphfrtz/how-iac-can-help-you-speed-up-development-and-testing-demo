@@ -20,10 +20,32 @@ const demoFunction = new digitalocean.App("demoFunction", {
       production: false,
       version: "17"
     }],
-    envs: [{
-      key: "DATABASE_URL",
-      value: "${dev.DATABASE_URL}",
-    }],
+    envs: [
+      {
+        key: "DB_HOST",
+        value: "${dev.DB_HOST}",
+      },
+      {
+        key: "DB_PORT",
+        value: "${dev.DB_PORT}",
+      },
+      {
+        key: "DB_NAME",
+        value: "${dev.DB_NAME}",
+      },
+      {
+        key: "DB_USER",
+        value: "${dev.DB_USER}",
+      },
+      {
+        key: "DB_PASSWORD",
+        value: "${dev.DB_PASSWORD}",
+      },
+      {
+        key: "CA_CERT",
+        value: "${dev.CA_CERT}",
+      },
+    ],
     name: "demo-function",
     functions: [{
       name: "todos",
