@@ -29,9 +29,7 @@ const dbConfig = {
 };
 const pool = new pg_1.Pool(dbConfig);
 let client;
-() => __awaiter(void 0, void 0, void 0, function* () {
-    client = yield pool.connect();
-});
+(() => __awaiter(void 0, void 0, void 0, function* () { client = yield pool.connect(); }))();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

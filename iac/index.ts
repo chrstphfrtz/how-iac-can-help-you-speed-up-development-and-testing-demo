@@ -35,7 +35,7 @@ const demoBackend = new digitalocean.App("demoBackend", {
     services: [{
       name: "demo-backend",
       instanceCount: 1,
-      instanceSizeSlug: "apps-s-1vcpu-1gb",
+      instanceSizeSlug: "apps-s-1vcpu-0.5gb",
       git: {
         repoCloneUrl: "https://github.com/chrstphfrtz/how-iac-can-help-you-speed-up-development-and-testing-demo.git",
         branch: "main"
