@@ -1,4 +1,4 @@
-import { Pool, PoolConfig } from 'pg';
+import { Pool, PoolClient, PoolConfig } from 'pg';
 
 const dbConfig: PoolConfig = {
     user: process.env.DB_USER,
@@ -10,59 +10,39 @@ const dbConfig: PoolConfig = {
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
     ssl: {
-        rejectUnauthorized: false,
+        rejectUnauthorized: true,
+        ca: process.env.CA_CERT
     },
 };
 
-let pool: Pool;
+interface DigitalOceanEvent {
+    http?: {
+        method: string;
+        path: string;
+        headers: { [key: string]: string };
+        queryString: string;
+        body?: any;
+    };
+    [key: string]: any;
+}
 
-const getDatabasePool = (): Pool => {
-    if (!pool) {
-        console.log('Initializing database connection pool...');
-        pool = new Pool(dbConfig);
+interface DigitalOceanResponse {
+    statusCode: number;
+    body: any;
+    headers?: { [key: string]: string };
+}
 
-        pool.on('error', (err) => {
-            console.error('Unexpected error on idle client', err);
-            process.exit(-1);
-        });
-    }
-    return pool;
-};
+export async function main(event: DigitalOceanEvent, context: any): Promise<DigitalOceanResponse> {
+    const pool = new Pool(dbConfig);
+    const client = await pool.connect();
 
-export const main = async (args: any): Promise<any> => {
-    // let name: string = args['name'] || 'stranger'
-    // let greeting: string = 'Hello ' + name + '!'
-    // console.log(greeting)
-    // return { body: greeting }
+    const result = await client.query('SELECT NOW()');
 
-    const databasePool = getDatabasePool();
-    let client;
-
-    try {
-        client = await databasePool.connect();
-        console.log('Database client connected from pool.');
-
-        // Perform database operations here
-        const result = await client.query('SELECT NOW()');
-        console.log('Database query result:', result.rows[0]);
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: 'Database connection and query successful',
-                currentTime: result.rows[0].now,
-            }),
-        };
-    } catch (error) {
-        console.error('Database operation failed:', error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ message: error.message }),
-        };
-    } finally {
-        if (client) {
-            client.release(); // Release the client back to the pool
-            console.log('Database client released.');
-        }
-    }
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            message: 'Database connection and query successful',
+            currentTime: result.rows[0].now,
+        }),
+    };
 }
