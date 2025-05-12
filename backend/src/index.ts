@@ -23,8 +23,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.get('/', async (req: Request, res: Response) => {
+  console.log(`Do we have a client? ${client}`);
   const result = await client.query('SELECT NOW()');
-  res.status(200).json({ message: `The current time: ${result}` })
+  res.status(200).json({ message: `The current time: ${result.rows[0].now}` })
 });
 
 app.listen(port, () => {
