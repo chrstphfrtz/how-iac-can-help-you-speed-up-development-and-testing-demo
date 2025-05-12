@@ -89,11 +89,11 @@ app.post('/', async (req: Request, res: Response) => {
   }
 })
 
-// DELETE /
+// DELETE /:id
 // This endpoint deletes the todo with the given ID.
-app.delete('/', async (req: Request, res: Response) => {
+app.delete('/:id', async (req: Request, res: Response) => {
   let client: PoolClient | undefined;
-  const { id } = req.body;
+  const id = parseInt(req.params.id, 10);
   try {
     client = await pool.connect();
     await client.query(`DELETE FROM todos WHERE id = ${id}`);

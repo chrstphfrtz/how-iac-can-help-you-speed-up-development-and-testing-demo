@@ -49,6 +49,8 @@ const demoBackend = new digitalocean.App("demoBackend", {
   }
 })
 
+export const demoBackendUrl = demoBackend.liveUrl;
+
 const demoFirewall = new digitalocean.DatabaseFirewall("demoFirewall", {
   clusterId: demoDatabase.id,
   rules: [{
