@@ -12,6 +12,7 @@ import {
   Keyboard,
   TouchableOpacity, // Import TouchableOpacity for a more flexible button style
 } from 'react-native';
+import Config from 'react-native-config';
 
 import { AntDesign } from '@expo/vector-icons'; // Import an icon library if you prefer icons over text buttons
 
@@ -25,7 +26,7 @@ interface Todo {
 // *** IMPORTANT: Replace with your actual API endpoint ***
 // For POST requests, the endpoint is often the same as the GET endpoint for the collection.
 // For DELETE requests, it's typically API_URL/id
-const API_URL = 'https://demo-backend-s8r24.ondigitalocean.app';
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
