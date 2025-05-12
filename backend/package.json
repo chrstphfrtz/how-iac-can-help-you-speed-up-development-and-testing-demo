@@ -1,0 +1,26 @@
+{
+  "name": "how-iac-can-help-you-speed-up-development-and-testing-backend",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Christoph Fritz <christoph.fritz@looparmor.dev>",
+  "license": "Apache-2.0",
+  "description": "Demo backend for 'How IaC can help you speed up development and teesting'.",
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.15.6"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.17",
+    "@types/pg": "^8.15.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,9 +1,0 @@
-{
-  "main": "lib/index.js",
-  "devDependencies": {
-    "typescript": "^4"
-  },
-  "scripts": {
-    "build": "tsc -b"
-  }
-}
