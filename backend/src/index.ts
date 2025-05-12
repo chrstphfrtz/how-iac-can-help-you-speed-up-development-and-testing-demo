@@ -63,7 +63,9 @@ app.post('/todos', async (req: Request, res: Response) => {
   const { title } = req.body;
   try {
     client = await pool.connect();
-    const result = await client.query(`INSERT INTO todos (title) VALUES (${title}) RETURNING id`);
+    const sql = "INSERT INTO todos (title) VALUES ($1) RETURNING id";
+    const values = [title];
+    const result = await client.query(sql, values);
     res.status(201).json({
       success: true,
       message: `Todo with title ${title} added successfully`,
