@@ -47,8 +47,11 @@ app.get('/todos', async (req: Request, res: Response) => {
   let client: PoolClient | undefined;
   try {
     client = await pool.connect();
-    const result = await client.query('SELECT NOW()');
-    res.status(200).json({ message: `The current time: ${result.rows[0].now}` })
+    const result = await client.query('SELECT * FROM todos');
+    res.status(200).json({
+      success: true,
+      todos: result.rows,
+    })
   } catch (err) {
     throw err;
   } finally {
