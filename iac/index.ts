@@ -32,7 +32,7 @@ const demoBackend = new digitalocean.App("demoBackend", {
       },
       {
         key: "DB_PORT",
-        value: `${demoDatabase.port}`,
+        value: demoDatabase.port.apply(port => port.toString()),
       },
     ],
     name: "demo-backend",
