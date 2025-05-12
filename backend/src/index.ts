@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
-import { Pool, PoolClient, PoolConfig } from 'pg';
+import { Pool, PoolClient } from 'pg';
 
-const dbConfig: PoolConfig = {
+// Create a new pool for the PostgreSQL database with the connection details stored in different environment variables.
+const pool = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   host: process.env.DB_HOST,
@@ -12,11 +13,10 @@ const dbConfig: PoolConfig = {
   connectionTimeoutMillis: 2000,
   ssl: {
     rejectUnauthorized: false,
-  },
-};
+  }
+});
 
-const pool = new Pool(dbConfig);
-
+// Create the 'todos' table in the database.
 (async () => {
   let client: PoolClient | undefined;
   try {
@@ -28,7 +28,6 @@ const pool = new Pool(dbConfig);
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
     `;
-
     await client.query(createTodosTableSql);
   } catch (err) {
     throw err;
@@ -39,10 +38,14 @@ const pool = new Pool(dbConfig);
   }
 })()
 
+// Instantiate the express app, use middleware to be able to work with the JSON body of the request and define the
+// port which can also be specified by an environment variable.
 const app = express();
 app.use(express.json())
 const port = process.env.PORT || 3000;
 
+// GET /todos
+// This endpoint returns all the todos from the 'todos' table as a list.
 app.get('/todos', async (req: Request, res: Response) => {
   let client: PoolClient | undefined;
   try {
@@ -61,6 +64,8 @@ app.get('/todos', async (req: Request, res: Response) => {
   }
 });
 
+// POST /todos
+// This endpoint adds a todo to the 'todos' table and returns its id and title in the response.
 app.post('/todos', async (req: Request, res: Response) => {
   let client: PoolClient | undefined;
   const { title } = req.body;
@@ -84,6 +89,23 @@ app.post('/todos', async (req: Request, res: Response) => {
   }
 })
 
+app.delete('/todos', async (req: Request, res: Response) => {
+  let client: PoolClient | undefined;
+  const { id } = req.body;
+  try {
+    client = await pool.connect();
+    await client.query(`DELETE FROM todos WHERE id = ${id}`);
+    res.status(204).send();
+  } catch (err) {
+    throw err;
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
+})
+
+// Start the express app to handle incoming requests.
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
