@@ -18,6 +18,5 @@ packages:
             DB_HOST: "${DB_HOST}"
             DB_NAME: "${DB_NAME}"
             DB_PORT: "${DB_PORT}"
-            CA_CERT: "${CA_CERT}"
           annotations: {}
           limits: {}
