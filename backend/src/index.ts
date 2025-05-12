@@ -16,7 +16,7 @@ const dbConfig: PoolConfig = {
 };
 
 const pool = new Pool(dbConfig);
-let client: PoolClient
+let client: PoolClient;
 (async () => { client = await pool.connect() })()
 
 const app = express();
