@@ -17,7 +17,7 @@ const demoBackend = new digitalocean.App("demoBackend", {
       {
         key: "DATABASE_URL",
         value: demoDatabase.uri,
-      }
+      },
     ],
     name: "demo-backend",
     region: "fra1",
