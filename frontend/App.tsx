@@ -25,7 +25,7 @@ interface Todo {
 // *** IMPORTANT: Replace with your actual API endpoint ***
 // For POST requests, the endpoint is often the same as the GET endpoint for the collection.
 // For DELETE requests, it's typically API_URL/id
-const API_URL = 'https://demo-backend-s8r24.ondigitalocean.app/';
+const API_URL = 'https://demo-backend-s8r24.ondigitalocean.app';
 
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
