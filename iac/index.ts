@@ -1,37 +1,26 @@
 import * as digitalocean from "@pulumi/digitalocean";
 
+const demoDatabase = new digitalocean.DatabaseCluster("demoDatabase", {
+  nodeCount: 1,
+  engine: "pg",
+  size: digitalocean.DatabaseSlug.DB_1VPCU1GB,
+  region: digitalocean.Region.FRA1,
+  name: "main",
+  projectId: "c1cf44a6-cd57-41bf-b95b-f6a60efed99c",
+  version: "17",
+});
+
 const demoBackend = new digitalocean.App("demoBackend", {
   projectId: "c1cf44a6-cd57-41bf-b95b-f6a60efed99c",
   spec: {
-    databases: [{
-      name: "db",
-      engine: "PG",
-      production: false,
-      version: "17"
-    }],
     envs: [
       {
-        key: "DB_USER",
-        value: "${db.USERNAME}",
-      },
-      {
-        key: "DB_PASSWORD",
-        value: "${db.PASSWORD}",
-      },
-      {
-        key: "DB_HOST",
-        value: "${db.HOSTNAME}",
-      },
-      {
-        key: "DB_NAME",
-        value: "${db.DATABASE}",
-      },
-      {
-        key: "DB_PORT",
-        value: "${db.PORT}",
-      },
+        key: "DATABASE_URL",
+        value: demoDatabase.uri,
+      }
     ],
     name: "demo-backend",
+    region: "fra1",
     services: [{
       name: "demo-backend",
       instanceCount: 1,
@@ -43,4 +32,12 @@ const demoBackend = new digitalocean.App("demoBackend", {
       sourceDir: "backend"
     }]
   }
+})
+
+const demoFirewall = new digitalocean.DatabaseFirewall("demoFirewall", {
+  clusterId: demoDatabase.id,
+  rules: [{
+    type: "app",
+    value: demoBackend.id
+  }]
 })
