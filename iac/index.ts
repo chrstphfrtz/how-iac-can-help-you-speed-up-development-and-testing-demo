@@ -15,12 +15,27 @@ const demoBackend = new digitalocean.App("demoBackend", {
   spec: {
     envs: [
       {
-        key: "DATABASE_URL",
-        value: demoDatabase.uri,
+        key: "DB_USER",
+        value: demoDatabase.user,
+      },
+      {
+        key: "DB_PASSWORD",
+        value: demoDatabase.password,
+      },
+      {
+        key: "DB_HOST",
+        value: demoDatabase.host,
+      },
+      {
+        key: "DB_NAME",
+        value: demoDatabase.database,
+      },
+      {
+        key: "DB_PORT",
+        value: `${demoDatabase.port}`,
       },
     ],
     name: "demo-backend",
-    region: "fra1",
     services: [{
       name: "demo-backend",
       instanceCount: 1,

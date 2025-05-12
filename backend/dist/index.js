@@ -13,18 +13,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const fs_1 = __importDefault(require("fs"));
 const pg_1 = require("pg");
-console.log(process.cwd());
 // Create a new pool for the PostgreSQL database with the connection details stored in different environment variables.
 const pool = new pg_1.Pool({
-    connectionString: process.env.DATABASE_URL,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    port: parseInt(process.env.DB_PORT || '5432', 10),
     max: 1,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
     ssl: {
-        rejectUnauthorized: true,
-        ca: fs_1.default.readFileSync('demoDatabaseCa.crt'),
+        rejectUnauthorized: false,
     }
 });
 // Create the 'todos' table in the database.

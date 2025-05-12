@@ -1,16 +1,18 @@
 import express, { Request, Response } from 'express';
-import fs from 'fs';
 import { Pool, PoolClient } from 'pg';
 
 // Create a new pool for the PostgreSQL database with the connection details stored in different environment variables.
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  port: parseInt(process.env.DB_PORT || '5432', 10),
   max: 1,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
   ssl: {
-    rejectUnauthorized: true,
-    ca: fs.readFileSync('./src/demoDatabaseCa.crt'),
+    rejectUnauthorized: false,
   }
 });
 
