@@ -44,9 +44,9 @@ const app = express();
 app.use(express.json())
 const port = process.env.PORT || 3000;
 
-// GET /todos
+// GET /
 // This endpoint returns all the todos from the 'todos' table as a list.
-app.get('/todos', async (req: Request, res: Response) => {
+app.get('/', async (req: Request, res: Response) => {
   let client: PoolClient | undefined;
   try {
     client = await pool.connect();
@@ -64,9 +64,9 @@ app.get('/todos', async (req: Request, res: Response) => {
   }
 });
 
-// POST /todos
+// POST /
 // This endpoint adds a todo to the 'todos' table and returns its id and title in the response.
-app.post('/todos', async (req: Request, res: Response) => {
+app.post('/', async (req: Request, res: Response) => {
   let client: PoolClient | undefined;
   const { title } = req.body;
   try {
@@ -89,7 +89,9 @@ app.post('/todos', async (req: Request, res: Response) => {
   }
 })
 
-app.delete('/todos', async (req: Request, res: Response) => {
+// DELETE /
+// This endpoint deletes the todo with the given ID.
+app.delete('/', async (req: Request, res: Response) => {
   let client: PoolClient | undefined;
   const { id } = req.body;
   try {
