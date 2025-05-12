@@ -16,17 +16,68 @@ const dbConfig: PoolConfig = {
 };
 
 const pool = new Pool(dbConfig);
-let client: PoolClient;
-(async () => { client = await pool.connect() })()
+
+(async () => {
+  let client: PoolClient | undefined;
+  try {
+    client = await pool.connect();
+    const createTodosTableSql = `
+      CREATE TABLE IF NOT EXISTS todos (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+
+    await client.query(createTodosTableSql);
+  } catch (err) {
+    throw err;
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
+})()
 
 const app = express();
+app.use(express.json())
 const port = process.env.PORT || 3000;
 
-app.get('/', async (req: Request, res: Response) => {
-  console.log(`Do we have a client? ${client}`);
-  const result = await client.query('SELECT NOW()');
-  res.status(200).json({ message: `The current time: ${result.rows[0].now}` })
+app.get('/todos', async (req: Request, res: Response) => {
+  let client: PoolClient | undefined;
+  try {
+    client = await pool.connect();
+    const result = await client.query('SELECT NOW()');
+    res.status(200).json({ message: `The current time: ${result.rows[0].now}` })
+  } catch (err) {
+    throw err;
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
 });
+
+app.post('/todos', async (req: Request, res: Response) => {
+  let client: PoolClient | undefined;
+  const { title } = req.body;
+  try {
+    client = await pool.connect();
+    const result = await client.query(`INSERT INTO todos (title) VALUES (${title}) RETURNING id`);
+    res.status(201).json({
+      success: true,
+      message: `Todo with title ${title} added successfully`,
+      id: result.rows[0].id,
+      title: title,
+    });
+  } catch (err) {
+    throw err;
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
+})
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
