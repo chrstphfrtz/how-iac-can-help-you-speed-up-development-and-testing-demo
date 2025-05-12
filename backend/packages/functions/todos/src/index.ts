@@ -10,8 +10,7 @@ const dbConfig: PoolConfig = {
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
     ssl: {
-        rejectUnauthorized: true,
-        ca: process.env.CA_CERT
+        rejectUnauthorized: false,
     },
 };
 
