@@ -10,7 +10,6 @@ packages:
         - name: todos
           binary: false
           main: ""
-          runtime: nodejs:22
           web: true
           parameters: {}
           environment:
