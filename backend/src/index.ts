@@ -10,7 +10,7 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
   ssl: {
     rejectUnauthorized: true,
-    ca: fs.readFileSync('demoDatabaseCa.crt'),
+    ca: fs.readFileSync('./src/demoDatabaseCa.crt'),
   }
 });
 
