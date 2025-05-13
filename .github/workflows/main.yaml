@@ -1,6 +1,8 @@
 name: Pulumi Destroy on PR merge
 on:
   pull_request:
+    types:
+      - closed
     branches:
       - main
 jobs:
