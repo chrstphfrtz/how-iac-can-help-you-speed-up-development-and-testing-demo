@@ -1,16 +1,20 @@
 import * as digitalocean from "@pulumi/digitalocean";
 
-const demoDatabase = new digitalocean.DatabaseCluster("demoDatabase", {
+const stack = process.env.STACK;
+
+const demoDatabaseName = `demo-database-${stack}`;
+const demoDatabase = new digitalocean.DatabaseCluster(demoDatabaseName, {
   nodeCount: 1,
   engine: "pg",
   size: digitalocean.DatabaseSlug.DB_1VPCU1GB,
   region: digitalocean.Region.FRA1,
-  name: "main",
+  name: demoDatabaseName,
   projectId: "c1cf44a6-cd57-41bf-b95b-f6a60efed99c",
   version: "17",
 });
 
-const demoBackend = new digitalocean.App("demoBackend", {
+const demoBackendName = `demo-backend-${stack}`
+const demoBackend = new digitalocean.App(demoBackendName, {
   projectId: "c1cf44a6-cd57-41bf-b95b-f6a60efed99c",
   spec: {
     envs: [
@@ -35,9 +39,9 @@ const demoBackend = new digitalocean.App("demoBackend", {
         value: demoDatabase.port.apply(port => port.toString()),
       },
     ],
-    name: "demo-backend",
+    name: demoBackendName,
     services: [{
-      name: "demo-backend",
+      name: demoBackendName,
       instanceCount: 1,
       instanceSizeSlug: "apps-s-1vcpu-0.5gb",
       git: {
@@ -51,7 +55,8 @@ const demoBackend = new digitalocean.App("demoBackend", {
 
 export const demoBackendUrl = demoBackend.liveUrl;
 
-const demoFirewall = new digitalocean.DatabaseFirewall("demoFirewall", {
+const demoFirewallName = `demo-firewall-${stack}`;
+const demoFirewall = new digitalocean.DatabaseFirewall(demoFirewallName, {
   clusterId: demoDatabase.id,
   rules: [{
     type: "app",
