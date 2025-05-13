@@ -13,6 +13,8 @@ if [ -z "${DIGITALOCEAN_TOKEN}" ]; then
 fi
 
 stack=$(git rev-parse --abbrev-ref HEAD)
+export STACK=${stack}
+
 stack_exists=$(pulumi -C iac/ stack ls -j | jq -r --arg stack ${stack} 'any(.[] ; .name == $stack)')
 
 if [ "${stack_exists}" = "false" ]; then
