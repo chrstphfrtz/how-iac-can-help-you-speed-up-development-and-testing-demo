@@ -51,9 +51,9 @@ app.get('/', async (req: Request, res: Response) => {
   try {
     client = await pool.connect();
     const result = await client.query('SELECT * FROM todos');
-    res.status(200).json({
-      todos: result.rows,
-    })
+    res.status(200).json(
+      result.rows,
+    )
   } catch (err) {
     throw err;
   } finally {

@@ -17,50 +17,28 @@ interface Todo {
   title: string;
 }
 
-// *** IMPORTANT: Replace with your actual API endpoint ***
-// For POST requests, the endpoint is often the same as the GET endpoint for the collection.
-// For DELETE requests, it's typically API_URL/id
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true); // State for initial load
-  const [isRefreshing, setIsRefreshing] = useState(false); // State for pull-to-refresh
-  const [error, setError] = useState<string | null>(null); // State to track errors
+  const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // --- State for Adding Todo ---
-  const [isAddingTodo, setIsAddingTodo] = useState(false); // Controls visibility of input area
-  const [newTodoTitle, setNewTodoTitle] = useState(''); // Holds the text input value
-  const [isSavingTodo, setIsSavingTodo] = useState(false); // State for saving indicator
-  const [saveFeedback, setSaveFeedback] = useState<string | null>(null); // Feedback message after save
-  // --- End State for Adding Todo ---
+  const [isAddingTodo, setIsAddingTodo] = useState(false);
+  const [newTodoTitle, setNewTodoTitle] = useState('');
+  const [isSavingTodo, setIsSavingTodo] = useState(false);
+  const [saveFeedback, setSaveFeedback] = useState<string | null>(null);
 
-  // --- State for Deleting Todo ---
-  // Using a Set to easily check if an ID is currently being deleted
   const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
-  const [deleteFeedback, setDeleteFeedback] = useState<string | null>(null); // Optional feedback for delete
-  // --- End State for Deleting Todo ---
+  const [deleteFeedback, setDeleteFeedback] = useState<string | null>(null);
 
-
-  // Function to fetch data - reusable for initial load and refreshing
   const fetchData = useCallback(async () => {
-    try {
-      const response = await fetch(API_URL);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const { _, todos } = await response.json();
-      const data: Todo[] = todos;
-      setTodos(data);
-      setError(null); // Clear any previous errors on successful fetch
-    } catch (e: any) {
-      console.error('Error fetching todos:', e);
-      setError(e.message || 'An error occurred fetching todos.');
-      // setTodos([]); // Optionally clear existing todos on error during refresh if you want
-    }
-  }, []); // Empty dependency array because API_URL is a constant
+    const response = await fetch(API_URL);
+    const { todos } = await response.json();
+    const data: Todo[] = todos;
+    setTodos(data);
+  }, []);
 
   // Effect for initial data fetch on component mount
   useEffect(() => {
