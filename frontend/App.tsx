@@ -10,17 +10,11 @@ import {
   Button,
   TextInput,
   Keyboard,
-  TouchableOpacity, // Import TouchableOpacity for a more flexible button style
+  TouchableOpacity,
 } from 'react-native';
-import Config from 'react-native-config';
-
-import { AntDesign } from '@expo/vector-icons'; // Import an icon library if you prefer icons over text buttons
-
-// Define the type for a Todo item based on your server response
 interface Todo {
-  id: number; // Assuming each todo has a unique ID
-  title: string; // Or whatever property holds the todo text/title
-  // Add other properties if they exist, e.g., completed: boolean;
+  id: number;
+  title: string;
 }
 
 // *** IMPORTANT: Replace with your actual API endpoint ***

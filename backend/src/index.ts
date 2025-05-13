@@ -52,7 +52,6 @@ app.get('/', async (req: Request, res: Response) => {
     client = await pool.connect();
     const result = await client.query('SELECT * FROM todos');
     res.status(200).json({
-      success: true,
       todos: result.rows,
     })
   } catch (err) {
@@ -75,8 +74,6 @@ app.post('/', async (req: Request, res: Response) => {
     const values = [title];
     const result = await client.query(sql, values);
     res.status(201).json({
-      success: true,
-      message: `Todo with title ${title} added successfully`,
       id: result.rows[0].id,
       title: title,
     });
