@@ -1,0 +1,29 @@
+name: Pulumi Destroy on PR merge
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  pulumi-destroy:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Install Pulumi CLI
+        uses: pulumi/action-install-pulumi-cli@v3
+      - name: Login to Pulumi Backend
+        uses: pulumi/actions-login@v3
+        with:
+          cloud-url: 'pulumi.cloud'
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+      - name: Run Pulumi Destroy
+        run: |
+          pulumi -C iac/ -s ${{ github.event.pull_request.head.ref }} destroy --yes
+        env:
+          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}

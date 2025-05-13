@@ -3,5 +3,6 @@
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
 	"features": {
 		"ghcr.io/devcontainers-extra/features/pulumi:1": {}
-	}
+	},
+	"postCreateCommand": "./.devcontainer/postCreate.sh"
 }
