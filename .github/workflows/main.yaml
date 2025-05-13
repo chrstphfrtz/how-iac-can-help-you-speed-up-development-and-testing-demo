@@ -16,16 +16,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-      - name: Install Pulumi CLI
-        uses: pulumi/action-install-pulumi-cli@v3
-      - name: Login to Pulumi Backend
-        uses: pulumi/actions-login@v3
+      - name: Run Pulumi Destroy
+        uses: pulumi/actions@v6
         with:
-          cloud-url: 'pulumi.cloud'
+          command: destroy
+          stack-name: ${{ github.event.pull_request.head.ref }}
+          work-dir: iac/
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-      - name: Run Pulumi Destroy
-        run: |
-          pulumi -C iac/ -s ${{ github.event.pull_request.head.ref }} destroy --yes
-        env:
           DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
