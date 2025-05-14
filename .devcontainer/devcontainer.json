@@ -4,5 +4,5 @@
 	"features": {
 		"ghcr.io/devcontainers-extra/features/pulumi:1": {}
 	},
-	"postCreateCommand": "./.devcontainer/postCreate.sh"
+	"postStartCommand": "./.devcontainer/postStart.sh"
 }

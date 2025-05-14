@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Pool, PoolClient } from 'pg';
 
-// Create a new pool for the PostgreSQL database with the connection details stored in different environment variables.
 const pool = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -16,7 +15,6 @@ const pool = new Pool({
   }
 });
 
-// Create the 'todos' table in the database.
 (async () => {
   let client: PoolClient | undefined;
   try {
@@ -38,14 +36,10 @@ const pool = new Pool({
   }
 })()
 
-// Instantiate the express app, use middleware to be able to work with the JSON body of the request and define the
-// port which can also be specified by an environment variable.
 const app = express();
 app.use(express.json())
 const port = process.env.PORT || 3000;
 
-// GET /
-// This endpoint returns all the todos from the 'todos' table as a list.
 app.get('/', async (req: Request, res: Response) => {
   let client: PoolClient | undefined;
   try {
@@ -63,8 +57,6 @@ app.get('/', async (req: Request, res: Response) => {
   }
 });
 
-// POST /
-// This endpoint adds a todo to the 'todos' table and returns its id and title in the response.
 app.post('/', async (req: Request, res: Response) => {
   let client: PoolClient | undefined;
   const { title } = req.body;
@@ -86,8 +78,6 @@ app.post('/', async (req: Request, res: Response) => {
   }
 })
 
-// DELETE /:id
-// This endpoint deletes the todo with the given ID.
 app.delete('/:id', async (req: Request, res: Response) => {
   let client: PoolClient | undefined;
   const id = parseInt(req.params.id, 10);
@@ -104,7 +94,6 @@ app.delete('/:id', async (req: Request, res: Response) => {
   }
 })
 
-// Start the express app to handle incoming requests.
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

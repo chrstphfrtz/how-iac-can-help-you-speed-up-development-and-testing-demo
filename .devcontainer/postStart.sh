@@ -23,7 +23,11 @@ if [ "${stack_exists}" = "false" ]; then
 fi
 
 pulumi -C iac/ -s ${stack} up -y
-pulumi -C iac/ -s ${stack} stack output demoBackendUrl -j | xargs -I {} echo "export EXPO_PUBLIC_API_URL={}" > frontend/.env
+demoBackendUrl=$(pulumi -C iac/ -s ${stack} stack output demoBackendUrl -j | tr -d "\"")
+export API_URL=${demoBackendUrl}
+node .devcontainer/generateTestData.js
+
+echo "export EXPO_PUBLIC_API_URL=${demoBackendUrl}" > frontend/.env
 
 cd frontend
 
